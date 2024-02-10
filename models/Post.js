@@ -41,6 +41,12 @@ Post.init({
 	}
   },
   {
+	hooks: {
+		beforeCreate: async (newPostData) => {
+			newPostData.created_date = new Date();
+			return newPostData;
+		},
+    },
     sequelize,
     timestamps: false,
     freezeTableName: true,
