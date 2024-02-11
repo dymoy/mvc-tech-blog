@@ -65,7 +65,7 @@ router.get('/:id', async (req, res) => {
  * @route POST '/api/users/'
  * Creates a `User` and adds it to the database 
  */
-route.post('/', async (req, res) => {
+router.post('/', async (req, res) => {
     try { 
         // Create the user with the req.body information 
         const userData = await User.create({
@@ -88,9 +88,9 @@ route.post('/', async (req, res) => {
 
 /**
  * @route POST '/api/users/login'
- * 
+ * Sets the sessiom.loggedIn value to true if the email entered exists in the database and the password matches
  */
-route.post('/login', async (req, res) => {
+router.post('/login', async (req, res) => {
     try { 
         const userData = await User.findOne({ 
             where: { email: req.body.email } 
@@ -98,26 +98,97 @@ route.post('/login', async (req, res) => {
 
         if (!userData) {
             res.status(400).json({ 
-                message: 'Incorrect email or password! Please try again.' 
+                message: 'The entered email was not found. Please try again.' 
             });
             return;
         }
 
-        const validPassword = await userData.checkPassword(req.body.password);
+        const validPassword = userData.checkPassword(req.body.password);
         if (!validPassword) {
             res.status(400).json({ 
-                message: 'Incorrect email or password! Please try again.' 
+                message: 'Incorrect password! Please try again.' 
             });
             return;
         }
 
+        // Once the user successfully logs in, set up the sessions variable 'loggedIn'
         req.session.save(() => {
             req.session.user_id = userData.id;
+            req.session.username = userData.username;
             req.session.logged_in = true;
             
-            res.json({ user: userData, message: 'You are now logged in!' });
+            res.status(200).json({ 
+                user: userData, 
+                message: 'You are now logged in!' 
+            });
         });
 
+    } catch(err) {
+        res.status(500).json(err);
+    }
+});
+
+/**
+ * @route POST 'api/users/logout' 
+ * Logs the user out by destroying the session 
+ */
+router.post('/logout', (req, res) => {
+    // When the user logs out, destroy the session
+    if (req.session.loggedIn) {
+        req.session.destroy(() => {
+            res.status(204).end();
+        });
+    } else {
+        res.status(404).end();
+    }
+});
+
+/**
+ * @route PUT '/api/users/:id' 
+ * Updates the data for the user by `id`
+ */
+router.put('/:id', async (req, res) => {
+    try { 
+        const userData = await User.update(req.body, {
+            where: {
+                id: req.params.id
+            },
+            individualHooks: true,
+        });
+
+        if (!userData) {
+            res.status(404).json({
+                message: 'No user data was found with the requested id.'
+            });
+            return;
+        }
+
+        res.status(200).json(userData);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+/**
+ * @route DELETE '/api/users/:id'
+ * Removes the requested user by id
+ */
+router.delete('/:id', async (req, res) => {
+    try { 
+        const userData = await User.destroy({
+            where: {
+                id: req.params.id,
+            }
+        });
+
+        if (!userData) {
+            res.status(404).json({
+                message: 'No user data was found with the requested id.'
+            });
+            return;
+        }
+
+        res.status(200).json(userData);
     } catch(err) {
         res.status(500).json(err);
     }
