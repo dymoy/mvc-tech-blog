@@ -41,6 +41,7 @@ Post.init({
 	}
   },
   {
+	// Add a beforeCreate hook for the created_date attribute
 	hooks: {
 		beforeCreate: async (newPostData) => {
 			newPostData.created_date = new Date();

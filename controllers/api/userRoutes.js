@@ -1,3 +1,7 @@
+/**
+ * @file userRoutes.js
+ * Implements the API routes for the `User` model
+ */
 const router = require('express').Router();
 const { User, Post } = require('../../models');
 
