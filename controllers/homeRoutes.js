@@ -1,11 +1,8 @@
 const router = require('express').Router();
-const { User, Post } = require('../../models');
+const sequelize = require('../config/connection');
+const { Post, User } = require('../models');
 
-/**
- * @route GET '/api/posts'
- * Finds and returns all post data in the database
- */
-router.get('/', async (req,res) => {
+router.get('/', async (req, res) => {
     try {
         const postData = await Post.findAll({
             attributes: [
@@ -31,11 +28,12 @@ router.get('/', async (req,res) => {
             });
             return;
         }
-    
-        res.status(200).json(postData);
+
+        const posts = postData.map(post => post.get({ plain: true }));
+        res.render('homepage', { posts });
     } catch (err) {
         res.status(500).json(err);
     }
-});
+  });
 
-module.exports = router;
+  module.exports = router;
