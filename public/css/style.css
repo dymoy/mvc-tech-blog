@@ -41,21 +41,23 @@ main {
   flex-grow: 1;
 }
 
-nav {
+.navbar {
   display: flex;
   background-color: var(--secondary);
+  flex-direction: row;
+  justify-content: center;
 }
 
-nav a {
-  color: var(--light);
+.navbar-item {
   padding: 14px 20px;
+  margin: 5px;
   text-decoration: none;
   text-align: center;
 }
 
 nav a:hover {
-  color: var(--secondary);
-  background-color: var(--dark);
+  color: var(--light);
+  background-color: var(--tertiary);
 }
 
 /* CARDS */
