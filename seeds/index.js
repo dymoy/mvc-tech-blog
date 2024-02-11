@@ -1,3 +1,8 @@
+/**
+ * @file index.js
+ * Runs the *-seeds.js files to add data into the database
+ */
+
 const seedUsers = require('./user-seeds');
 const seedPosts = require('./post-seeds');
 

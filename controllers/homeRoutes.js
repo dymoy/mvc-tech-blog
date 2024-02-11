@@ -1,7 +1,18 @@
+/**
+ * @file homeRoutes.js
+ * Implements the API routes to return the data to render on the homepage.
+ * 
+ * @see  ../views/homepage.handlebars
+ */
+
 const router = require('express').Router();
 const sequelize = require('../config/connection');
 const { Post, User } = require('../models');
 
+/**
+ * @route GET '/' 
+ * Finds and returns all `Posts` in the database to render in homepage.handlebars
+ */
 router.get('/', async (req, res) => {
     try {
         const postData = await Post.findAll({

@@ -1,3 +1,8 @@
+/**
+ * @file post-seeds.js
+ * Calls the bulkCreate function on the `Post` model to add data to the database
+ */
+
 const { Post } = require('../models');
 
 const postData = [

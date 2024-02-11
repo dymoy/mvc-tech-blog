@@ -1,3 +1,7 @@
+/**
+ * @file user-seeds.js
+ * Calls the bulkCreate function on the `User` model to add data to the database
+ */
 const { User } = require('../models');
 
 const userData = [
