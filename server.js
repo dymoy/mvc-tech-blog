@@ -1,26 +1,52 @@
-/* Require necessary npm package dependencies */
+/* Require npm package dependencies*/
 const path = require('path');
-const sequelize = require('./config/connection');
 const express = require('express');
+const session = require('express-session');
 const exphbs = require('express-handlebars');
 
-/* Require local modules */
+/* Require local routes and helpers */
+const routes = require('./controllers');
 const helpers = require('./utils/helpers');
-const hbs = exphbs.create({ helpers });
+
+/* Require sequelize and sequelize store for session */
+const sequelize = require('./config/connection');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 /* Instantiate the express app */
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-/* Add middleware for body parsing and serving static files in /public */
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
+/* Set up Handlebars.js engine with custom helpers */
+const hbs = exphbs.create({ helpers });
 
-/* Add controllers and handlebars for MVC model */
-app.use(require('./controllers'));
+const sess = {
+  secret: 'green-grape',
+  cookie: {
+    // TODO: Update session expiry date, currently set to 3 minutes
+    maxAge: 3 * 60 * 1000,
+    httpOnly: true,
+    secure: false,
+    sameSite: 'strict',
+  },
+  resave: false,
+  saveUninitialized: true,
+  store: new SequelizeStore({
+    db: sequelize
+  })
+};
+
+app.use(session(sess));
+
+/* Inform Express.js to use template engine handlebars */
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
+
+/* Add middleware for body parsing and serving static files in /public */
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(routes);
 
 /* Sync sequelize models to the database, then turn on the server */
 sequelize.sync({ force: false }).then(() => {

@@ -15,9 +15,15 @@
         </h1>
     </header>
     <nav class="navbar">
+        {{#if loggedIn}}
         <a href="/" class="navbar-item">Home</a>
-        <a href="" class="navbar-item">Dashboard</a>
-        <a href="" class="navbar-item">Login</a>
+        <a href="/dashboard" class="navbar-item">Dashboard</a>
+        <a href="'/logout" class="navbar-item">Log out</a>
+        {{else}}
+        <a href="/" class="navbar-item">Home</a>
+        <a href="/login" class="navbar-item">Dashboard</a>
+        <a href="'/login" class="navbar-item">Login</a>
+        {{/if}}
     </nav>
     <main class="container">
         {{{body}}}
