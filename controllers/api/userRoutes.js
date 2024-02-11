@@ -3,7 +3,7 @@
  * Implements the API routes for the `User` model
  */
 const router = require('express').Router();
-const { User, Post } = require('../../models');
+const { User, Post, Comment } = require('../../models');
 
 /**
  * @route GET '/api/users'
@@ -43,14 +43,21 @@ router.get('/:id', async (req, res) => {
                         model: Post,
                         attributes: ['id', 'title', 'content', 'created_date'],
                     },
-                    // TODO: Add associated `Comments` here
+                    {
+                        model: Comment,
+                        atrributes: ['id', 'content', 'created_date'],
+                        include: {
+                            model: Post,
+                            attributes: ['id', 'title']
+                        }
+                    }
                 ],
             },
         );
 
         if (!userData) {
             res.status(404).json({
-                message: 'No user data was found with the requested id.'
+                message: 'No user data was found for the requested id.'
             });
             return;
         }
@@ -158,7 +165,7 @@ router.put('/:id', async (req, res) => {
 
         if (!userData) {
             res.status(404).json({
-                message: 'No user data was found with the requested id.'
+                message: 'No user data was found for the requested id.'
             });
             return;
         }
@@ -183,7 +190,7 @@ router.delete('/:id', async (req, res) => {
 
         if (!userData) {
             res.status(404).json({
-                message: 'No user data was found with the requested id.'
+                message: 'No user data was found for the requested id.'
             });
             return;
         }

@@ -1,32 +1,24 @@
 /**
- * @file Post.js
- * Defines the Sequelize model `Post` with the following attributes: 
+ * @file Comment.js
+ * Defines the Sequelize model `Comment` with the following attributes: 
  *  - id 
- *  - title
  *  - content
- *  - created_date
- *  - user_id (references `User` model `id`)
+ *  - user_id (references `User` model `id`) - the user that created the comment
+ *  - post_id (references `Post` model `id`) - the post of which the comment is replied to
  */
 
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
 
-class Post extends Model {}
+class Comment extends Model {}
 
-Post.init(
+Comment.init(
 	{
 		id: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			primaryKey: true,
 			autoIncrement: true,
-		},
-		title: {
-			type: DataTypes.STRING,
-			allowNull: false,
-			validate: {
-				len: [1]
-			}
 		},
 		content: {
 			type: DataTypes.TEXT('long'),
@@ -45,15 +37,23 @@ Post.init(
 				model: 'user',
 				key: 'id',
 			}
-		}
-  	},
-  	{
+		},
+		post_id: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			references: {
+				model: 'post',
+				key: 'id'
+			}
+		}, 	
+	},
+	{
 		sequelize,
 		timestamps: false,
 		freezeTableName: true,
 		underscored: true,
-		modelName: 'post',
-  	}
+		modelName: 'comment',
+	}
 );
 
-module.exports = Post;
+module.exports = Comment;
