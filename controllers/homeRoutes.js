@@ -45,6 +45,25 @@ router.get('/', async (req, res) => {
     } catch (err) {
         res.status(500).json(err);
     }
-  });
+});
 
-  module.exports = router;
+/**
+ * @route GET '/login'
+ * Checks if the user is logged in and renders the login page
+ */
+router.get('/login', async (req, res) => {
+    try {
+        // Check if the user is already logged in 
+        if (req.session.logged_in) {
+            // Redirect the request to back to Home
+            res.redirect('/');
+            return;
+        }
+        // Else, render the code in login.handlebars
+        res.render('login');
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+module.exports = router;

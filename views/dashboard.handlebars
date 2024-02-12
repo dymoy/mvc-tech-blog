@@ -1,0 +1,18 @@
+<div>
+    {{!-- TODO: Add option to add a new blog post --}}
+    <h3>My Dashboard</h3>
+{{#if posts.length}}
+</div>
+
+{{#each posts as |post|}}
+    {{!-- Call the posts.handlebars partial to render the posts --}}
+    {{> posts post}}
+        
+    {{!-- TODO: Add option to update/edit blog posts  --}}
+    </div>
+{{/each}}
+
+{{else}}
+<h4>You don't have any posts yet! Click the "New Post" button to get started.</h6>
+
+{{/if}}
