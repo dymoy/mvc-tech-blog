@@ -92,9 +92,8 @@ router.get('/:id', async (req, res) => {
 /**
  * @route POST '/api/posts/'
  * Creates a post and adds it to the database 
- * TODO: add withAuth 
  */
-router.post('/', async (req, res) => {
+router.post('/', withAuth, async (req, res) => {
     try {
         const postData = await Post.create({
             title: req.body.title,
@@ -102,26 +101,21 @@ router.post('/', async (req, res) => {
             created_date: new Date(),
             user_id: req.session.user_id,
         });
-
-        if (!postData) {
-            res.status(400).json({
-                message: 'The post failed to be created. Please validate request body or if user is logged in.'
-            });
-            return;
-        }
-
+        
         res.status(200).json(postData);
     } catch (err) {
-        res.status(500).json(err);
+        res.status(400).json({
+            message: 'The post failed to be created. Please validate request body or if user is logged in.',
+            error: err
+        });
     }
 });
 
 /**
  * @route PUT '/api/posts/:id'
  * Updates a post by id
- * TODO: add withAuth 
  */
-router.put('/:id', async (req, res)=> {
+router.put('/:id', withAuth, async (req, res)=> {
     try {
         const postData = await Post.update(
             {
@@ -151,9 +145,8 @@ router.put('/:id', async (req, res)=> {
 /**
  * @route DELETE '/api/posts/:id'
  * Deletes a post by id 
- * TODO: add withAuth
  */
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', withAuth, async (req, res) => {
     try {
         const postData = await Post.destroy({
             where: {
