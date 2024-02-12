@@ -4,6 +4,7 @@
  */
 const router = require('express').Router();
 const { User, Post, Comment } = require('../../models');
+const withAuth = require('../../utils/auth');
 
 /**
  * @route GET '/api/users'
@@ -89,7 +90,7 @@ router.post('/', async (req, res) => {
             res.status(200).json(userData);
         });
     } catch (err) {
-        res.status(500).json(err);
+        res.status(400).json(err);
     }
 });
 
@@ -154,7 +155,7 @@ router.post('/logout', (req, res) => {
  * @route PUT '/api/users/:id' 
  * Updates the data for the user by `id`
  */
-router.put('/:id', async (req, res) => {
+router.put('/:id', withAuth, async (req, res) => {
     try { 
         const userData = await User.update(req.body, {
             where: {
@@ -180,7 +181,7 @@ router.put('/:id', async (req, res) => {
  * @route DELETE '/api/users/:id'
  * Removes the requested user by id
  */
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', withAuth, async (req, res) => {
     try { 
         const userData = await User.destroy({
             where: {
