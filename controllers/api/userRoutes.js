@@ -4,6 +4,7 @@
  */
 const router = require('express').Router();
 const { User, Post, Comment } = require('../../models');
+const withAuth = require('../../utils/auth');
 
 /**
  * @route GET '/api/users'
@@ -153,6 +154,7 @@ router.post('/logout', (req, res) => {
 /**
  * @route PUT '/api/users/:id' 
  * Updates the data for the user by `id`
+ * TODO: add withAuth
  */
 router.put('/:id', async (req, res) => {
     try { 
@@ -179,6 +181,7 @@ router.put('/:id', async (req, res) => {
 /**
  * @route DELETE '/api/users/:id'
  * Removes the requested user by id
+ * TODO: add withAuth
  */
 router.delete('/:id', async (req, res) => {
     try { 
