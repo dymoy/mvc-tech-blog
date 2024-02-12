@@ -76,6 +76,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
     try { 
         // Create the user with the req.body information 
+        console.log("creating user...");
         const userData = await User.create({
             username: req.body.username,
             email: req.body.email,
@@ -96,7 +97,7 @@ router.post('/', async (req, res) => {
 
 /**
  * @route POST '/api/users/login'
- * Sets the sessiom.loggedIn value to true if the email entered exists in the database and the password matches
+ * Sets the session.logged_in value to true if the email entered exists in the database and the password matches
  */
 router.post('/login', async (req, res) => {
     try { 
@@ -104,6 +105,7 @@ router.post('/login', async (req, res) => {
             where: { email: req.body.email } 
         });
 
+        // Return an error if the email provided is not found in the database
         if (!userData) {
             res.status(400).json({ 
                 message: 'The entered email was not found. Please try again.' 
@@ -111,6 +113,7 @@ router.post('/login', async (req, res) => {
             return;
         }
 
+        // Return an error if the password provided does not match
         const validPassword = userData.checkPassword(req.body.password);
         if (!validPassword) {
             res.status(400).json({ 
@@ -123,14 +126,12 @@ router.post('/login', async (req, res) => {
         req.session.save(() => {
             req.session.user_id = userData.id;
             req.session.username = userData.username;
-            req.session.logged_in = true;
+            req.session.loggedIn = true;
             
             res.status(200).json({ 
                 user: userData, 
-                message: 'You are now logged in!' 
-            });
+                message: 'You are now logged in!' });
         });
-
     } catch(err) {
         res.status(500).json(err);
     }
