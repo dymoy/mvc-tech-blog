@@ -6,7 +6,6 @@
  */
 
 const router = require('express').Router();
-const sequelize = require('../config/connection');
 const { Post, User } = require('../models');
 
 /**
@@ -14,6 +13,7 @@ const { Post, User } = require('../models');
  * Finds and returns all `Posts` in the database to render in homepage.handlebars
  */
 router.get('/', async (req, res) => {
+    console.log(`Session is logged in for ${req.session.username}`);
     try {
         const postData = await Post.findAll({
             attributes: [
@@ -54,7 +54,7 @@ router.get('/', async (req, res) => {
 router.get('/login', async (req, res) => {
     try {
         // Check if the user is already logged in 
-        if (req.session.logged_in) {
+        if (req.session.loggedIn) {
             // Redirect the request to back to Home
             res.redirect('/');
             return;
