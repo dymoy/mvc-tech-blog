@@ -55,11 +55,10 @@ router.get('/', withAuth, async (req, res) => {
 });
 
 /**
- * TODO: GET route to create a post 
- * GET '/dashboard/addPost'
+ * @route GET '/dashboard/addPost'
+ * Renders the add-post.handlebars page for the user to create a new post
  */
 router.get('/addPost', withAuth, async (req, res) => {
-    console.log('API ROUTE ADDPOST CALLED...');
     try {
         const postData = await Post.findAll({
             where: {
@@ -72,7 +71,6 @@ router.get('/addPost', withAuth, async (req, res) => {
                 'content',
                 'created_date',
             ],
-            order: [['created_date', 'DESC']],
             include: [
                 {
                     model: User,
@@ -100,8 +98,57 @@ router.get('/addPost', withAuth, async (req, res) => {
 
 })
 
+/**
+ * @route GET '/update/:id'
+ * Renders the update-post.handlebars page for the user to either edit or delete the post 
+ */
+router.get('/update/:id', withAuth, async (req, res) => {
+    try {
+        const postData = await Post.findOne({
+            where: {
+                id: req.params.id,
+            },
+            attributes: [
+                'id',
+                'title',
+                'content',
+                'created_date',
+            ],
+            include: [
+                { 
+                    model: User,
+                    attributes: ['id', 'username'],
+                },
+                {
+                    model: Comment,
+                    attributes: ['id', 'content', 'created_date'],
+                    include: {
+                        model: User,
+                        attributes: ['id', 'username']
+                    }
+                }
+            ],
+        });
 
-// TODO: PUT route to update a post 
+        if (!postData) {
+            res.status(404).json({
+                message: 'No post data was found for the requested id.'
+            });
+            return;
+        }
 
+        // Serialize the data 
+        const post = postData.get({ plain: true });
+        res.render(
+            'update-post',
+            {
+                post,
+                loggedIn: true,
+            }
+        );
+    } catch (err) {
+        res.status(500).json(err);
+    }
+})
 
 module.exports = router;
