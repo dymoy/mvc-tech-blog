@@ -13,7 +13,6 @@ const { Post, User } = require('../models');
  * Finds and returns all `Posts` in the database to render in homepage.handlebars
  */
 router.get('/', async (req, res) => {
-    console.log(`Session is logged in for ${req.session.username}`);
     try {
         const postData = await Post.findAll({
             attributes: [

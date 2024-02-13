@@ -1,5 +1,4 @@
 <div>
-    {{!-- TODO: Add option to add a new blog post --}}
     <h3 class="my-4 text-light">My Dashboard</h3>
 {{#if posts.length}}
 </div>
@@ -16,3 +15,6 @@
     <h5 class="mb-4">You don't have any posts yet! Click the "New Post" button to get started.</h5>
 </div>
 {{/if}}
+
+{{!-- Add button to create new post --}}
+<a href="/dashboard/addPost"><button id="add-post-btn" class="button">+ New Post</button></a>
