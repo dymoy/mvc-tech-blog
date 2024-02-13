@@ -97,12 +97,18 @@ nav a:hover {
   padding: 15px 15px;
   font-size: 1rem;
   text-align: left;
+  overflow-y: scroll;
 }
 
 .user-info {
   font-size: 0.8rem;
   text-align: right;
-  color: gray;
+  color: lightgray;
+}
+
+/* NEW POST */
+#post-content {
+  height: 200px;
 }
 
 /* LAYOUT */

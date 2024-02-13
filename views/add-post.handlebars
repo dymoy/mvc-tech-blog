@@ -1,0 +1,25 @@
+<div class="d-flex justify-content-start w-100">
+    <a href="/dashboard" class="back-btn mt-3 text-light " type="button"> &#60; Back to Dashboard</a>
+</div>
+<div class="card">
+    <div class="card-header d-flex justify-content-start">
+        <h2 class="title">Create New Post</h2><hr>
+    </div>
+    <div class="card-body">
+        <form class="form new-post-form">
+            <div class="mt-2">
+                <label for="post-title">Title</label>
+                <br>
+                <input class="input w-100" type="text" id="post-title" name="post-title" placeholder="Enter blog post title"/>
+            </div>
+            <div class="mt-3">
+                <label for="post-content">Content</label>
+                <br>
+                <textarea class="input w-100" type="text" id="post-content" name="post-content" placeholder="Enter blog post content"></textarea>
+            </div>
+            <button type="submit" class="button mt-3 mb-2">Create</button>
+        </form>
+    </div>
+</div>  
+
+<script src="/js/addPost.js"></script>
