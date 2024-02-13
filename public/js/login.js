@@ -6,7 +6,7 @@ const loginFormHandler = async (event) => {
     const password = document.querySelector('#password-login').value.trim();
   
     if (email && password) {
-      // Send a POST request to the API endpoint
+      // Call the /login api route to attempt user login
       const response = await fetch('/api/users/login', {
 		method: 'POST',
 		body: JSON.stringify({ email, password }),
@@ -29,6 +29,7 @@ const signupFormHandler = async (event) => {
     const email = document.querySelector('#email-signup').value.trim();
     const password = document.querySelector('#password-signup').value.trim();
   
+	// Create a User and add it to the data base
     if (username && email && password) {
       const response = await fetch('/api/users', {
         method: 'POST',
@@ -39,7 +40,7 @@ const signupFormHandler = async (event) => {
       if (response.ok) {
         document.location.replace('/dashboard');
       } else {
-        alert(response.statusText);
+        alert('Failed to sign up.');
       }
     }
 };
