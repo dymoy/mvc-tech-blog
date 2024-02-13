@@ -16,7 +16,6 @@ const withAuth = require('../utils/auth');
  */
 router.get('/', withAuth, async (req, res) => {
     try { 
-        console.log("entered dashboardRoutes GET");
         const postData = await Post.findAll({
             where: {
                 // Filter the posts using user_id defined in the session
