@@ -16,8 +16,11 @@ const withAuth = require('../utils/auth');
  */
 router.get('/', withAuth, async (req, res) => {
     try { 
-        console.log("entered dashboardRoutes GET");
         const postData = await Post.findAll({
+            where: {
+                // Filter the posts using user_id defined in the session
+                user_id: req.session.user_id
+            },
             attributes: [
                 'id',
                 'title',
@@ -41,11 +44,19 @@ router.get('/', withAuth, async (req, res) => {
             ],
         });
         const posts = postData.map((post) => post.get({ plain: true }));
-        res.render('dashboard');
 
+        res.render('dashboard', {
+            posts,
+            loggedIn: req.session.loggedIn
+        });
     } catch (err) {
         res.status(500).json(err);
     }
-  });
+});
 
-  module.exports = router;
+// TODO: POST route to create a post 
+
+// TODO: PUT route to update a post 
+
+
+module.exports = router;

@@ -6,20 +6,20 @@ const loginFormHandler = async (event) => {
     const password = document.querySelector('#password-login').value.trim();
   
     if (email && password) {
-      // Send a POST request to the API endpoint
-      const response = await fetch('/api/users/login', {
-		method: 'POST',
-		body: JSON.stringify({ email, password }),
-		headers: { 'Content-Type': 'application/json' },
-      }).then((res) => {
+      	// Call the /login api route to attempt user login
+      	const response = await fetch('/api/users/login', {
+			method: 'POST',
+			body: JSON.stringify({ email, password }),
+			headers: { 'Content-Type': 'application/json' },
+    	});
+
 		// If successful, redirect the browser to the dashboard page
-    	if (res.ok) {
-        	document.location.replace('/dashboard');
-        } else {
+		if (response.ok) {
+			document.location.replace('/dashboard');
+		} else {
 			alert('Failed to login.');
 		}
-      });
-    }
+	}
 };
   
 const signupFormHandler = async (event) => {
@@ -29,18 +29,19 @@ const signupFormHandler = async (event) => {
     const email = document.querySelector('#email-signup').value.trim();
     const password = document.querySelector('#password-signup').value.trim();
   
+	// Create a User and add it to the data base
     if (username && email && password) {
-      const response = await fetch('/api/users', {
-        method: 'POST',
-        body: JSON.stringify({ username, email, password }),
-        headers: { 'Content-Type': 'application/json' },
-      });
+		const response = await fetch('/api/users', {
+			method: 'POST',
+			body: JSON.stringify({ username, email, password }),
+			headers: { 'Content-Type': 'application/json' },
+   		});
   
-      if (response.ok) {
-        document.location.replace('/dashboard');
-      } else {
-        alert(response.statusText);
-      }
+		if (response.ok) {
+			document.location.replace('/dashboard');
+		} else {
+			alert('Failed to sign up.');
+		}
     }
 };
   

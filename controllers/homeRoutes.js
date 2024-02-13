@@ -41,11 +41,19 @@ router.get('/', async (req, res) => {
         }
 
         const posts = postData.map(post => post.get({ plain: true }));
-        res.render('homepage', { posts });
+        res.render('homepage', { 
+            posts,
+            loggedIn: req.session.loggedIn
+        });
     } catch (err) {
         res.status(500).json(err);
     }
 });
+
+/**
+ * @route GET '/:id'
+ * Finds and returns the data for Post by id 
+ */
 
 /**
  * @route GET '/login'

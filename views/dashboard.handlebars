@@ -1,9 +1,9 @@
 <div>
     {{!-- TODO: Add option to add a new blog post --}}
-    <h3 class="my-3 text-light">My Dashboard</h3>
-</div>
+    <h3 class="my-4 text-light">My Dashboard</h3>
 {{#if posts.length}}
-<div>
+</div>
+<div class="container">
     {{#each posts as |post|}}
         {{!-- Call the posts.handlebars partial to render the posts --}}
         {{> posts post}}
@@ -11,6 +11,8 @@
     {{/each}}
 </div>
 {{else}}
-    <h5 class="my-3">You don't have any posts yet! Click the "New Post" button to get started.</h5>
-{{/if}}
 </div>
+<div>
+    <h5 class="mb-4">You don't have any posts yet! Click the "New Post" button to get started.</h5>
+</div>
+{{/if}}

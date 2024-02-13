@@ -86,9 +86,13 @@ router.post('/', async (req, res) => {
         // Save session data 
         req.session.save(() => {
             req.session.user_id = userData.id;
-            req.session.logged_in = true;
+            req.session.username = userData.username;
+            req.session.loggedIn = true;
       
-            res.status(200).json(userData);
+            res.status(200).json({ 
+                user: userData, 
+                message: 'You are now logged in!' 
+            });
         });
     } catch (err) {
         res.status(400).json(err);
@@ -97,7 +101,7 @@ router.post('/', async (req, res) => {
 
 /**
  * @route POST '/api/users/login'
- * Sets the session.logged_in value to true if the email entered exists in the database and the password matches
+ * Sets the session.loggedIn value to true if the email entered exists in the database and the password matches
  */
 router.post('/login', async (req, res) => {
     try { 
@@ -130,7 +134,8 @@ router.post('/login', async (req, res) => {
             
             res.status(200).json({ 
                 user: userData, 
-                message: 'You are now logged in!' });
+                message: 'You are now logged in!' 
+            });
         });
     } catch(err) {
         res.status(500).json(err);
