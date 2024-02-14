@@ -1,18 +1,18 @@
 /**
- * @function deleteFormHandler
+ * @function deletePostFormHandler
  * @param {*} event 
  * 
- * Handles the event the delete button on update-post.handlebars is clicked 
+ * Handles the event the user is deleting a post in update-post.handlebars 
  */
-async function deleteFormHandler(event) {
+async function deletePostFormHandler(event) {
     event.preventDefault();
     
-    // Retrieve the post ID from the window 
+    // Retrieve id from window
     const id = window.location.toString().split('/')[
         window.location.toString().split('/').length - 1
     ];
 
-    // Call the postRoute to delete the post by id
+    // Call the postRoute DELETE api route to delete the post by id
     const response = await fetch(`/api/posts/${id}`, {
         method: 'DELETE',
         body: JSON.stringify({
@@ -29,4 +29,5 @@ async function deleteFormHandler(event) {
     }
   }
   
-  document.querySelector('.delete-post-btn').addEventListener('click', deleteFormHandler);
+  document.querySelector('.delete-post-btn').addEventListener('click', deletePostFormHandler);
+  

@@ -1,11 +1,9 @@
 /**
- * @file logout.js
- * Calls fetch on /logout to destroy the session
- * 
- * @see ~/userRoutes.js
+ * @function logout
+ * Destroys the current session 
  */
 async function logout() {
-    // Destroy the session 
+    // Calls userRoutes POST /logout API route to destroy the session 
     const response = await fetch('/api/users/logout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' }
