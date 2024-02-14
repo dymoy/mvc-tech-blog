@@ -1,22 +1,23 @@
 <div>
     <h3 class="my-4 text-light">My Dashboard</h3>
 </div>
+
 {{!-- Add button to create new post --}}
 <a href="/dashboard/addPost"><button id="add-post-btn" class="button">+ New Post</button></a>
 
+{{!-- Render the posts if they exist in the database --}}
 {{#if posts.length}}
-<div class="container">
+    <div class="container">
         {{#each posts as |post|}}
-            {{!-- Make each post card clickable to expand it --}}
+            {{!-- Wrap each post in <a>, which links to dashboard route get post by id, so the user can click to expand it --}}
             <a href="/dashboard/update/{{post.id}}" class="container w-100">
-                {{!-- Call the posts.handlebars partial to render the posts --}}
+                {{!-- Call the posts.handlebars partial to render the post --}}
                 {{> posts post}}
             </a>
         {{/each}}
     </div>
 {{else}}
-</div>
-<div>
-    <h5 class="my-5">You don't have any posts yet! Click the "New Post" button to get started.</h5>
-</div>
+    <div>
+        <h5 class="my-5">You don't have any posts yet! Click the "New Post" button to get started.</h5>
+    </div>
 {{/if}}
