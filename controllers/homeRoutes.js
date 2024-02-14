@@ -6,7 +6,7 @@
  */
 
 const router = require('express').Router();
-const { Post, User } = require('../models');
+const { Post, User, Comment } = require('../models');
 
 /**
  * @route GET '/' 
@@ -15,19 +15,20 @@ const { Post, User } = require('../models');
 router.get('/', async (req, res) => {
     try {
         const postData = await Post.findAll({
-            attributes: [
-                'id',
-                'title',
-                'content',
-                'created_date',
-            ],
+            attributes: ['id', 'title', 'content', 'created_date'],
             order: [['created_date', 'DESC']],
             include: [
                 {
                     model: User,
-                    attributes: [
-                        'username',
-                    ]
+                    attributes: ['id', 'username']
+                },
+                {
+                    model: Comment,
+                    attributes: ['id', 'content', 'created_date'],
+                    include: {
+                        model: User,
+                        attributes: ['id', 'username']
+                    }
                 }
             ],
         });
@@ -53,6 +54,51 @@ router.get('/', async (req, res) => {
  * @route GET '/:id'
  * Finds and returns the data for Post by id 
  */
+router.get('/post/:id', async (req, res) => {
+    console.log("homeRoutes GET called...");
+    try {
+        const postData = await Post.findByPk(
+            req.params.id, 
+            {
+                attributes: ['id', 'title', 'content', 'created_date'],
+                include: [
+                    { 
+                        model: User,
+                        attributes: ['id', 'username'],
+                    },
+                    {
+                        model: Comment,
+                        attributes: ['id', 'content', 'created_date', 'user_id', 'post_id'],
+                        include: {
+                            model: User,
+                            attributes: ['id', 'username']
+                        }
+                    }
+                ]
+        });
+        
+        if (!postData) {
+            res.status(404).json({
+                message: 'No post data was found for the requested id.'
+            });
+            return;
+        }
+
+        // Serialize the data 
+        const post = postData.get({ plain: true });
+
+        // Pass data to single-post.handlebars
+        res.render(
+            'single-post',
+            {
+                post,
+                loggedIn: req.session.loggedIn
+            }
+        );
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
 
 /**
  * @route GET '/login'
