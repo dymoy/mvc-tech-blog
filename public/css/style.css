@@ -68,12 +68,22 @@ footer {
 /* CARDS */
 .card {
   margin: 20px;
-  flex: 0 1 300px;
+  flex: 0 1 auto;
   border: 7px double var(--dark);
   border-radius: 10px;
   background-color: var(--light);
   color: var(--dark);
   width: 70%;
+}
+
+.comment-card {
+  margin: 12px;
+  flex: 0 1 auto;
+  border: 7px double var(--dark);
+  border-radius: 10px;
+  background-color: var(--light);
+  color: var(--dark);
+  width: 60%;
 }
 
 .login-card {
@@ -119,6 +129,8 @@ footer {
   background-color: var(--tertiary);
   color: var(--light);
 }
+
+
 
 /* LAYOUT */
 .container {

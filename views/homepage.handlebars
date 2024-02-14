@@ -1,5 +1,8 @@
 {{#each posts as |post|}}
-    {{> posts post}}
+    {{!-- Wrap each post in <a>, which links to homeRoute get by id, so the user can click to expand it--}}
+    <a href="/post/{{id}}" class="container w-100">
+        {{> posts post}}
+    </a>
     {{else}}
         <h4>No posts to show!</h4>
 {{/each}}
