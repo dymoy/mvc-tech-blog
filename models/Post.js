@@ -5,7 +5,7 @@
  *  - title
  *  - content
  *  - created_date
- *  - user_id (references `User` model `id`)
+ *  - user_id (references `User` model `id`) - the user that created the post
  */
 
 const { Model, DataTypes } = require('sequelize');
@@ -19,7 +19,7 @@ Post.init(
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			primaryKey: true,
-			autoIncrement: true,
+			autoIncrement: true
 		},
 		title: {
 			type: DataTypes.STRING,
@@ -37,13 +37,13 @@ Post.init(
 		},
 		created_date: {
 			type: DataTypes.DATE,
-			allowNull: false,
+			allowNull: false
 		},
 		user_id: {
 			type: DataTypes.INTEGER,
 			references: {
 				model: 'user',
-				key: 'id',
+				key: 'id'
 			}
 		}
   	},
@@ -52,7 +52,7 @@ Post.init(
 		timestamps: false,
 		freezeTableName: true,
 		underscored: true,
-		modelName: 'post',
+		modelName: 'post'
   	}
 );
 

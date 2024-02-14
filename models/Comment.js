@@ -18,7 +18,7 @@ Comment.init(
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			primaryKey: true,
-			autoIncrement: true,
+			autoIncrement: true
 		},
 		content: {
 			type: DataTypes.TEXT('long'),
@@ -29,13 +29,13 @@ Comment.init(
 		},
 		created_date: {
 			type: DataTypes.DATE,
-			allowNull: false,
+			allowNull: false
 		},
 		user_id: {
 			type: DataTypes.INTEGER,
 			references: {
 				model: 'user',
-				key: 'id',
+				key: 'id'
 			}
 		},
 		post_id: {
@@ -45,14 +45,14 @@ Comment.init(
 				model: 'post',
 				key: 'id'
 			}
-		}, 	
+		}
 	},
 	{
 		sequelize,
 		timestamps: false,
 		freezeTableName: true,
 		underscored: true,
-		modelName: 'comment',
+		modelName: 'comment'
 	}
 );
 
