@@ -1,7 +1,13 @@
+/**
+ * @function newCommentFormHandler 
+ * @param {*} event 
+ * 
+ * Handles the event the user is adding a new comment to a post in single-post.handlebars
+ */
 async function newCommentFormHandler(event) {
     event.preventDefault();
   
-    // Instantiate `content` to the value of #comment-content tag
+    // Retrieve the comment text 
     const content = document.getElementById('comment-content').value;
 
     // Retrieve post_id from window 
@@ -11,7 +17,7 @@ async function newCommentFormHandler(event) {
   
     // Validate that inputted comment is not empty 
     if (content) {
-        console.log("Calling POST api route...");
+        // Call commentRoutes.js POST api route to create a new comment in the database
         const response = await fetch('/api/comments', {
             method: 'POST',
             body: JSON.stringify({

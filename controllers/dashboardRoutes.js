@@ -1,6 +1,6 @@
 /**
  * @file dashboardRoutes.js
- * Implements the API routes to return the data to render on the dashboard page
+ * Implements the dashboard page API routes to render handlebars files
  * 
  * @see  ../views/dashboard.handlebars
  */
@@ -12,7 +12,7 @@ const withAuth = require('../utils/auth');
 
 /** 
  * @route GET '/dashboard'
- * Finds and returns the user's blog posts 
+ * Checks the session user, finds the post data for the user, and returns data to render in dashboard.handlebars
  */
 router.get('/', withAuth, async (req, res) => {
     try { 
@@ -25,7 +25,7 @@ router.get('/', withAuth, async (req, res) => {
                 'id',
                 'title',
                 'content',
-                'created_date',
+                'created_date'
             ],
             order: [['created_date', 'DESC']],
             include: [
@@ -41,8 +41,10 @@ router.get('/', withAuth, async (req, res) => {
                         attributes: ['id', 'username']
                     }
                 }
-            ],
+            ]
         });
+
+        // Serialize and render the data in .handlebars
         const posts = postData.map((post) => post.get({ plain: true }));
 
         res.render('dashboard', {
@@ -56,7 +58,7 @@ router.get('/', withAuth, async (req, res) => {
 
 /**
  * @route GET '/dashboard/addPost'
- * Renders the add-post.handlebars page for the user to create a new post
+ * Checks the session user, finds the post data for the user, and returns data to render in add-post.handlebars
  */
 router.get('/addPost', withAuth, async (req, res) => {
     try {
@@ -69,7 +71,7 @@ router.get('/addPost', withAuth, async (req, res) => {
                 'id',
                 'title',
                 'content',
-                'created_date',
+                'created_date'
             ],
             include: [
                 {
@@ -84,13 +86,14 @@ router.get('/addPost', withAuth, async (req, res) => {
                         attributes: ['id', 'username']
                     }
                 }
-            ],
+            ]
         });
 
+        // Serialize and render the data in add-post.handlebars
         const posts = postData.map(post => post.get({ plain: true }));
         res.render('add-post', {
             posts,
-            loggedIn: true,
+            loggedIn: true
         });
     } catch (err) {
         res.status(500).json(err);
@@ -100,7 +103,7 @@ router.get('/addPost', withAuth, async (req, res) => {
 
 /**
  * @route GET '/update/:id'
- * Renders the update-post.handlebars page for the user to either edit or delete the post 
+ * Checks the session user, finds the post data by id for the user, and returns data to render in update-post.handlebars
  */
 router.get('/update/:id', withAuth, async (req, res) => {
     try {
@@ -112,7 +115,7 @@ router.get('/update/:id', withAuth, async (req, res) => {
                 'id',
                 'title',
                 'content',
-                'created_date',
+                'created_date'
             ],
             include: [
                 { 
@@ -127,7 +130,7 @@ router.get('/update/:id', withAuth, async (req, res) => {
                         attributes: ['id', 'username']
                     }
                 }
-            ],
+            ]
         });
 
         if (!postData) {
@@ -137,15 +140,12 @@ router.get('/update/:id', withAuth, async (req, res) => {
             return;
         }
 
-        // Serialize the data 
+        // Serialize and render the data in update-post.handlebars
         const post = postData.get({ plain: true });
-        res.render(
-            'update-post',
-            {
-                post,
-                loggedIn: true,
-            }
-        );
+        res.render('update-post', {
+            post,
+            loggedIn: true,
+        });
     } catch (err) {
         res.status(500).json(err);
     }

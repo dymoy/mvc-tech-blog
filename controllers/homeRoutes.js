@@ -1,6 +1,6 @@
 /**
  * @file homeRoutes.js
- * Implements the API routes to return the data to render on the homepage.
+ * Implements the home page API routes to render handlebars files
  * 
  * @see  ../views/homepage.handlebars
  */
@@ -30,7 +30,7 @@ router.get('/', async (req, res) => {
                         attributes: ['id', 'username']
                     }
                 }
-            ],
+            ]
         });
     
         if (!postData) {
@@ -40,6 +40,7 @@ router.get('/', async (req, res) => {
             return;
         }
 
+        // Serialize and render the post data in homepage.handlebars
         const posts = postData.map(post => post.get({ plain: true }));
         res.render('homepage', { 
             posts,
@@ -52,10 +53,9 @@ router.get('/', async (req, res) => {
 
 /**
  * @route GET '/:id'
- * Finds and returns the data for Post by id 
+ * Finds and and returns Post data by id to render in single-post.handlebars
  */
 router.get('/post/:id', async (req, res) => {
-    console.log("homeRoutes GET called...");
     try {
         const postData = await Post.findByPk(
             req.params.id, 
@@ -75,7 +75,8 @@ router.get('/post/:id', async (req, res) => {
                         }
                     }
                 ]
-        });
+            }
+        );
         
         if (!postData) {
             res.status(404).json({
@@ -84,17 +85,12 @@ router.get('/post/:id', async (req, res) => {
             return;
         }
 
-        // Serialize the data 
+        // Serialize and render the post data and render it in single-post.handlebars
         const post = postData.get({ plain: true });
-
-        // Pass data to single-post.handlebars
-        res.render(
-            'single-post',
-            {
-                post,
-                loggedIn: req.session.loggedIn
-            }
-        );
+        res.render('single-post', {
+            post,
+            loggedIn: req.session.loggedIn
+        });
     } catch (err) {
         res.status(500).json(err);
     }
@@ -102,17 +98,16 @@ router.get('/post/:id', async (req, res) => {
 
 /**
  * @route GET '/login'
- * Checks if the user is logged in and renders the login page
+ * If the user is not logged in, redirect the user to login.handlebars
  */
 router.get('/login', async (req, res) => {
     try {
         // Check if the user is already logged in 
         if (req.session.loggedIn) {
-            // Redirect the request to back to Home
             res.redirect('/');
             return;
         }
-        // Else, render the code in login.handlebars
+        // If the user is not logged in, render login.handlebars for the user to login or sign up
         res.render('login');
     } catch (err) {
         res.status(500).json(err);

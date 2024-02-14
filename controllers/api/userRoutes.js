@@ -1,6 +1,7 @@
 /**
  * @file userRoutes.js
  * Implements the API routes for the `User` model
+ * Supported routes: GET all, GET by id, POST create, POST login, POST logout, PUT update by id, DELETE remove by id
  */
 const router = require('express').Router();
 const { User, Post, Comment } = require('../../models');
@@ -13,6 +14,7 @@ const withAuth = require('../../utils/auth');
 router.get('/', async (req, res) => {
     try {
         const userData = await User.findAll({
+            // Include all data except the user password
             attributes: { exclude: ['password'] }
         });
     
@@ -31,7 +33,7 @@ router.get('/', async (req, res) => {
 
 /**
  * @route GET '/api/users/:id'
- * Finds and returns the user data with the requested id, including the associated `Posts` of the user
+ * Finds and returns the user data with the requested id, including the associated Post and Comment data 
  */
 router.get('/:id', async (req, res) => {
     try {
@@ -75,15 +77,13 @@ router.get('/:id', async (req, res) => {
  */
 router.post('/', async (req, res) => {
     try { 
-        // Create the user with the req.body information 
-        console.log("creating user...");
         const userData = await User.create({
             username: req.body.username,
             email: req.body.email,
             password: req.body.password
         }); 
         
-        // Save session data 
+        // Once the user was created, log them in by saving session data 
         req.session.save(() => {
             req.session.user_id = userData.id;
             req.session.username = userData.username;
@@ -101,15 +101,17 @@ router.post('/', async (req, res) => {
 
 /**
  * @route POST '/api/users/login'
+ * Validates user credentials matches the database to log them in 
  * Sets the session.loggedIn value to true if the email entered exists in the database and the password matches
  */
 router.post('/login', async (req, res) => {
     try { 
+        // Find the user in the database by email 
         const userData = await User.findOne({ 
             where: { email: req.body.email } 
         });
 
-        // Return an error if the email provided is not found in the database
+        // Validate the user was found, else return 400 code for bad request
         if (!userData) {
             res.status(400).json({ 
                 message: 'The entered email was not found. Please try again.' 
@@ -117,7 +119,7 @@ router.post('/login', async (req, res) => {
             return;
         }
 
-        // Return an error if the password provided does not match
+        // Validate that the password entered matches the database record, else return 400 code for bad request
         const validPassword = userData.checkPassword(req.body.password);
         if (!validPassword) {
             res.status(400).json({ 
@@ -126,7 +128,7 @@ router.post('/login', async (req, res) => {
             return;
         }
 
-        // Once the user successfully logs in, set up the sessions variable 'loggedIn'
+        // If email and password match the database record, log the user in by saving session data 
         req.session.save(() => {
             req.session.user_id = userData.id;
             req.session.username = userData.username;
@@ -147,7 +149,7 @@ router.post('/login', async (req, res) => {
  * Logs the user out by destroying the session 
  */
 router.post('/logout', (req, res) => {
-    // When the user logs out, destroy the session
+    // If loggedIn value is true, destroy the active session
     if (req.session.loggedIn) {
         req.session.destroy(() => {
             res.status(204).end();
@@ -159,7 +161,7 @@ router.post('/logout', (req, res) => {
 
 /**
  * @route PUT '/api/users/:id' 
- * Updates the data for the user by `id`
+ * Updates the data for the user by `id` using data in req.body
  */
 router.put('/:id', withAuth, async (req, res) => {
     try { 
@@ -191,7 +193,7 @@ router.delete('/:id', withAuth, async (req, res) => {
     try { 
         const userData = await User.destroy({
             where: {
-                id: req.params.id,
+                id: req.params.id
             }
         });
 

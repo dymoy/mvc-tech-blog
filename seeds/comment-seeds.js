@@ -2,6 +2,7 @@
  * @file comment-seeds.js
  * Calls the bulkCreate function on the `Comment` model to add data to the database
  */
+
 const { Comment } = require('../models');
 
 const commentData = [
