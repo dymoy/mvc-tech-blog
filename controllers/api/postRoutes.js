@@ -1,6 +1,7 @@
 /**
  * @file postRoutes.js
  * Implements the API routes for the `Post` model
+ * Supported routes: GET all, GET by id, POST create, PUT update by id, DELETE remove by id
  */
 
 const router = require('express').Router();
@@ -9,7 +10,7 @@ const withAuth = require('../../utils/auth');
 
 /**
  * @route GET '/api/posts'
- * Finds and returns all post data in the database
+ * Finds and returns all post data, including associated User and Comment data 
  */
 router.get('/', async (req,res) => {
     try {
@@ -20,6 +21,7 @@ router.get('/', async (req,res) => {
                 'content',
                 'created_date',
             ],
+            // Order the data by created_date in descending order 
             order: [['created_date', 'DESC']],
             include: [
                 {
@@ -37,6 +39,7 @@ router.get('/', async (req,res) => {
             ],
         });
     
+        // Validate post data was found in the database
         if (!postData) {
             res.status(404).json({
                 message: 'No post data was found in the database.'
@@ -52,7 +55,7 @@ router.get('/', async (req,res) => {
 
 /**
  * @route GET '/api/posts/:id'
- * Find and return the post data by id
+ * Find and return the post data by id, including associated User and Comment data
  */
 router.get('/:id', async (req, res) => {
     try { 
@@ -96,24 +99,24 @@ router.get('/:id', async (req, res) => {
 router.post('/', withAuth, async (req, res) => {
     try {
         const postData = await Post.create({
+            // Get post title and content from the req.body
             title: req.body.title,
             content: req.body.content,
+            // Get user_id from req.session and create new Date object for created_date
             created_date: new Date(),
             user_id: req.session.user_id,
         });
         
         res.status(200).json(postData);
     } catch (err) {
-        res.status(400).json({
-            message: 'The post failed to be created. Please validate request body or if user is logged in.',
-            error: err
-        });
+        // Post instance failed to be created due to bad request
+        res.status(400).json(err);
     }
 });
 
 /**
  * @route PUT '/api/posts/:id'
- * Updates a post by id
+ * Updates a post by id using data from req.body
  */
 router.put('/:id', withAuth, async (req, res)=> {
     try {
