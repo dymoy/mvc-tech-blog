@@ -22,8 +22,8 @@ const hbs = exphbs.create({ helpers });
 const sess = {
   secret: 'green-grape',
   cookie: {
-    // TODO: Update session expiry date, currently set to 10 min.
-    maxAge: 10 * 30 * 1000
+    // Set the session time limit to 15 minutes
+    maxAge: 15 * 30 * 1000
   },
   resave: false,
   saveUninitialized: true,
