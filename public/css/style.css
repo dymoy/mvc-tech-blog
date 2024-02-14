@@ -76,7 +76,8 @@ footer {
   width: 70%;
 }
 
-.comment-card {
+.comment-card,
+.new-comment-card {
   margin: 12px;
   flex: 0 1 auto;
   border: 7px double var(--dark);

@@ -96,8 +96,7 @@ router.post('/', withAuth, async (req, res) => {
               created_date: new Date(),
               user_id: req.session.user_id,
               post_id: req.body.post_id,
-            });
-
+        });
             res.status(200).json(commentData);
         }
     } catch (err) {

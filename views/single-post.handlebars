@@ -1,17 +1,26 @@
+{{!-- Render the single post --}}
 {{> posts post}}
+
+{{!-- Render the existing comments --}}
 {{> comments post.comments}}
 
+{{!-- Render a field for user to add a comment if they are logged in --}}
 {{#if loggedIn}}
-	<form class="comment-form">
-		<div>
-    		<textarea class="" name="comment-content"></textarea>
-		</div>
-		<div class="user-options">
-    		<button class="button" type="submit">Add Comment</button>
-  		</div>
-	</form>
+<div class="card new-comment-card">
+    <div class="card-header"></div>
+    <div class="card-body">
+        <form class="form new-comment-form">
+            <div class="mt-2">
+                <textarea class="input w-100" type="text" id="comment-content" name="comment-content" placeholder="Enter comment"></textarea>
+            </div>
+            <div class="user-options d-flex flex-direction-col justify-content-evenly">
+                <button type="submit" class="button col-md-5 mt-3 mb-2">+ Add</button>
+            </div>
+        </form>
+    </div>
+</div>  
 {{/if}}
 
 {{#if loggedIn}}
-<script src="/js/comment.js"></script>
+<script src="/js/addComment.js"></script>
 {{/if}}
