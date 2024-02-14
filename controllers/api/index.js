@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-/* Import the api-routes files */
+/* Import the model API routes */
 const userRoutes = require('./userRoutes');
 const postRoutes = require('./postRoutes');
 const commentRoutes = require('./commentRoutes');

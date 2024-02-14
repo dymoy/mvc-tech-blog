@@ -10,12 +10,13 @@ require('dotenv').config();
 
 // Create the Sequelize instance 
 const Sequelize = require('sequelize');
+let sequelize;
 
 if (process.env.JAWSDB_URL) {
 	// Use JawsDB_URL to work with Heroku deployment
 	sequelize = new Sequelize(process.env.JAWSDB_URL);
 } else {
-	const sequelize = new Sequelize(
+	sequelize = new Sequelize(
 		process.env.DB_NAME,
 		process.env.DB_USER,
 		process.env.DB_PASSWORD,
