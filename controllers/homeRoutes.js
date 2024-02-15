@@ -98,17 +98,37 @@ router.get('/post/:id', async (req, res) => {
 
 /**
  * @route GET '/login'
- * If the user is not logged in, redirect the user to login.handlebars
+ * Redirects the user to login.handlebars page
  */
-router.get('/login', async (req, res) => {
+router.get('/login', (req, res) => {
     try {
-        // Check if the user is already logged in 
+        // If the user is already logged in, redirect to the home page
         if (req.session.loggedIn) {
             res.redirect('/');
             return;
         }
-        // If the user is not logged in, render login.handlebars for the user to login or sign up
+
+        // If the user is not logged in, render login.handlebars for the user to login
         res.render('login');
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+/**
+ * @route GET '/signup'
+ * Redirects the user to the signuo.handlebars page
+ */
+router.get('/signup', (req, res) => {
+    try { 
+        // If the user is logged in, redirect them to the homepage.handlebars page
+        if (req.session.loggedIn) {
+          res.redirect('/');
+          return;
+        }
+      
+        // If the user is not logged in, render signup.handlebars for the user to sign up 
+        res.render('signup');
     } catch (err) {
         res.status(500).json(err);
     }
