@@ -7,7 +7,7 @@ This web tool is a CMS-style tech blog where developers can publish their blog p
 
 The goal of this project is to build an application that follows the MVC paradigm in its architectural structure, using Handlebars.js as the templating language, Sequelize as the ORM, and the express-session npm package for authentication
 
-This project defines 4 Sequelize models: 
+This project defines 3 Sequelize models and utilizes the `express-session` model: 
 1. `User`
 2. `Post`
 3. `Comment`
@@ -63,15 +63,20 @@ The animation gif below demonstrates the app's functionality:
 - The navigation buttons for 'Dashboard' and 'Login' will redirect the user to the login page if there is no active session for them. 
 
 ### Dashboard Page Usage 
-- When logged in, the Dashboard page will display all the user's existing blog posts
-- A button will be displayed at the top to add a New Post
-    - The new post will not be created if the Title and Content fields are empty 
-    - Once the new post is created, they will be navigated back to their dashboard where their new post will appear 
-- Clicking on a post in the dashboard page will allow the user to update or delete the post in question
+- When logged in, the Dashboard page will display all the user's existing blog posts.
+- A button will be displayed at the top to add a New Post.
+    - The new post will not be created if the Title and Content fields are empty.
+    - Once the new post is created, they will be navigated back to their dashboard where their new post will appear.
+- Clicking on a post in the dashboard page will allow the user to update or delete the post in question.
 
-### Login and Sign Up Page Usage 
+### Login Page Usage 
 - The user will have the option to login if they already have an account, or press the `Sign Up Instead` to create an account. 
-- Once signed in, the user will be redirected to their Dashboard page, where they can create posts.
+- Once logged in, the user will be redirected to their Dashboard page. 
+    - They will then be able to create new posts in the dashboard page and add comments in the home page.
+
+### Sign Up Page Usage
+- The user will be able to create an account by filling all fields for the username, email, and password.
+- If the user already has an account, they can press the `Login Instead` button to be redirected to the login page.
 
 ## Testing 
 No test suites have been written for this application. The API routes were tested locally during development with the [Insomnia](https://docs.insomnia.rest/) development platform.  
