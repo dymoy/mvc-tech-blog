@@ -45,7 +45,7 @@ const commentData = [
     {
         user_id: 4,
         post_id: 5,
-        content: "Have you heard of the extention called Prettier? I would love to know how well it works together with ESLint.",
+        content: "Have you heard of the extension called Prettier? I would love to know how well it works together with ESLint.",
         created_date: "02/01/2024"
     },
 ]

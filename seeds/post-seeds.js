@@ -19,7 +19,7 @@ const postData = [
         user_id: 1,
     },
     {
-        title: "Have you heard of Sequlize?",
+        title: "Have you heard of Sequelize?",
         content: "Sequelize is a Node. js-based Object Relational Mapper that makes it easy to work with MySQL, MariaDB, SQLite, PostgreSQL databases, and more. Contact me if you're interested and want to learn more!",
         created_date: "11/03/2022",
         user_id: 3,

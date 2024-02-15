@@ -1,132 +1,93 @@
-# 14 Model-View-Controller (MVC): Tech Blog
+# MVC Tech Blog
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Your Task
+## Description 
 
-Writing about tech can be just as important as making it. Developers spend plenty of time creating new applications and debugging existing codebases, but most developers also spend at least some of their time reading and writing about technical concepts, recent advancements, and new technologies. A simple Google search for any concept covered in this course returns thousands of think pieces and tutorials from developers of all skill levels!
+This web tool is a CMS-style tech blog where developers can publish their blog posts and comment on other developers' posts.
 
-Your task this week is to build a CMS-style blog site similar to a Wordpress site, where developers can publish their blog posts and comment on other developers’ posts as well. You’ll build this site completely from scratch and deploy it to Heroku. Your app will follow the MVC paradigm in its architectural structure, using Handlebars.js as the templating language, Sequelize as the ORM, and the express-session npm package for authentication.
+The goal of this project is to build an application that follows the MVC paradigm in its architectural structure, using Handlebars.js as the templating language, Sequelize as the ORM, and the express-session npm package for authentication
 
-## User Story
+This project defines 4 Sequelize models: 
+1. `User`
+2. `Post`
+3. `Comment`
 
-```md
-AS A developer who writes about tech
-I WANT a CMS-style blog site
-SO THAT I can publish articles, blog posts, and my thoughts and opinions
-```
+The database is mapped according to the following schema:  
 
-## Acceptance Criteria
+![Image of Schema Architecture](./Assets/schema_architecture.png)
 
-```md
-GIVEN a CMS-style blog site
-WHEN I visit the site for the first time
-THEN I am presented with the homepage, which includes existing blog posts if any have been posted; navigation links for the homepage and the dashboard; and the option to log in
-WHEN I click on the homepage option
-THEN I am taken to the homepage
-WHEN I click on any other links in the navigation
-THEN I am prompted to either sign up or sign in
-WHEN I choose to sign up
-THEN I am prompted to create a username and password
-WHEN I click on the sign-up button
-THEN my user credentials are saved and I am logged into the site
-WHEN I revisit the site at a later time and choose to sign in
-THEN I am prompted to enter my username and password
-WHEN I am signed in to the site
-THEN I see navigation links for the homepage, the dashboard, and the option to log out
-WHEN I click on the homepage option in the navigation
-THEN I am taken to the homepage and presented with existing blog posts that include the post title and the date created
-WHEN I click on an existing blog post
-THEN I am presented with the post title, contents, post creator’s username, and date created for that post and have the option to leave a comment
-WHEN I enter a comment and click on the submit button while signed in
-THEN the comment is saved and the post is updated to display the comment, the comment creator’s username, and the date created
-WHEN I click on the dashboard option in the navigation
-THEN I am taken to the dashboard and presented with any blog posts I have already created and the option to add a new blog post
-WHEN I click on the button to add a new blog post
-THEN I am prompted to enter both a title and contents for my blog post
-WHEN I click on the button to create a new blog post
-THEN the title and contents of my post are saved and I am taken back to an updated dashboard with my new blog post
-WHEN I click on one of my existing posts in the dashboard
-THEN I am able to delete or update my post and taken back to an updated dashboard
-WHEN I click on the logout option in the navigation
-THEN I am signed out of the site
-WHEN I am idle on the site for more than a set time
-THEN I am able to view posts and comments but I am prompted to log in again before I can add, update, or delete posts
-```
 
-## Mock-Up
+## Table of Contents 
+- [Installation](#installation)
+- [Dependencies](#dependencies)
+- [Usage](#usage)
+- [Testing](#testing)
+- [Contributing](#contributing)
+- [License](#license)
+- [Questions](#questions)
+  
+## Installation 
 
-The following animation demonstrates the application functionality:
+There is no installation necessary as it is deployed to Heroku. You can visit the deployed application [here](https://dymoy-mvc-tech-blog-f7331d8522c8.herokuapp.com/) and try it out! 
 
-![Animation cycles through signing into the app, clicking on buttons, and updating blog posts.](./Assets/14-mvc-homework-demo-01.gif) 
+If you would like to run the application locally, use the following steps:
+1. Clone this repository to your local machine. (For reference, visit the [Cloning a Repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) GitHub Docs article.)
+2. Run `npm install` in your CLI to download the npm package dependencies. 
+3. Run `mysql -uroot -p` in your CLI and log into MySQL.
+4. Run `source db/schema.sql` to create the database on your local machine.
+5. Exit out of MySQL by running `exit`.
+6. Run `npm run seed` in the root directory to seed the database.
+7. Run `npm run start` to sync the Sequelize models to the MySQL database and start the server.
+8. Open `http://localhost:3001` in your local browser. 
+  
+## Dependencies
+This project requires the following npm package dependencies:
+1. [bcrypt](https://www.npmjs.com/package/bcrypt)
+2. [connect-session-sequelize](https://www.npmjs.com/package/connect-session-sequelize)
+3. [dotenv](https://www.npmjs.com/package/dotenv)
+4. [express](https://www.npmjs.com/package/express)
+5. [express-handlebars](https://www.npmjs.com/package/express-handlebars)
+6. [express-session](https://www.npmjs.com/package/express-session)
+7. [mysql2](https://www.npmjs.com/package/mysql2)
+8. [sequelize](https://www.npmjs.com/package/sequelize)
 
-## Getting Started
+## Usage 
 
-Your application’s folder structure must follow the Model-View-Controller paradigm. You’ll need to use the [express-handlebars](https://www.npmjs.com/package/express-handlebars) package to implement Handlebars.js for your Views, use the [MySQL2](https://www.npmjs.com/package/mysql2) and [Sequelize](https://www.npmjs.com/package/sequelize) packages to connect to a MySQL database for your Models, and create an Express.js API for your Controllers.
+The animation gif below demonstrates the app's functionality:  
+![Animation Gif of app functionality](./Assets/mvc_tech_blog_gif.gif)  
 
-You’ll also need the [dotenv package](https://www.npmjs.com/package/dotenv) to use environment variables, the [bcrypt package](https://www.npmjs.com/package/bcrypt) to hash passwords, and the [express-session](https://www.npmjs.com/package/express-session) and [connect-session-sequelize](https://www.npmjs.com/package/connect-session-sequelize) packages to add authentication.
+### Home Page Usage
+- When the user opens the web app, they will be presented with the homepage that displays all existings posts. 
+- Clicking on a post in the Home page will expand it to show existing comments for the post in question. 
+    - The user will not be able to post a comment if they are not logged in.
+- The navigation buttons for 'Dashboard' and 'Login' will redirect the user to the login page if there is no active session for them. 
 
-**Note**: The [express-session](https://www.npmjs.com/package/express-session) package stores the session data on the client in a cookie. When you are idle on the site for more than a set time, the cookie will expire and you will be required to log in again to start a new session. This is the default behavior and you do not have to do anything to your application other than implement the npm package.
+### Dashboard Page Usage 
+- When logged in, the Dashboard page will display all the user's existing blog posts
+- A button will be displayed at the top to add a New Post
+    - The new post will not be created if the Title and Content fields are empty 
+    - Once the new post is created, they will be navigated back to their dashboard where their new post will appear 
+- Clicking on a post in the dashboard page will allow the user to update or delete the post in question
 
-## Grading Requirements
+### Login and Sign Up Page Usage 
+- The user will have the option to login if they already have an account, or press the `Sign Up Instead` to create an account. 
+- Once signed in, the user will be redirected to their Dashboard page, where they can create posts.
 
-> **Note**: If a Challenge assignment submission is marked as “0”, it is considered incomplete and will not count towards your graduation requirements. Examples of incomplete submissions include the following:
->
-> * A repository that has no code
->
-> * A repository that includes a unique name but nothing else
->
-> * A repository that includes only a README file but nothing else
->
-> * A repository that only includes starter code
+## Testing 
+No test suites have been written for this application. The API routes were tested locally during development with the [Insomnia](https://docs.insomnia.rest/) development platform.  
 
-This Challenge is graded based on the following criteria:
+Please refer to the [Installation](#installation) section if you are interested in running and testing the application locally.
 
-### Technical Acceptance Criteria: 40%
+## Contributing
+To make contributions to this project:  
+1. Fork the repository  
+2. Make some commits to improve the application
+3. Open a Pull Request on GitHub
+4. From there, we can discuss your changes and merge the pull request once your contributions have been approved!
 
-* Satisfies all of the preceding acceptance criteria plus the following:
-
-    * Application’s folder structure follows the Model-View-Controller paradigm.
-
-    * Uses the [express-handlebars](https://www.npmjs.com/package/express-handlebars) package to implement Handlebars.js for your Views.
-
-    * Application must be deployed to Heroku.
-
-### Deployment: 32%
-
-* Application deployed at live URL.
-
-* Application loads with no errors.
-
-* Application GitHub URL submitted.
-
-* GitHub repository contains application code.
-
-### Application Quality: 15%
-
-* User experience is intuitive and easy to navigate.
-
-* User interface style is clean and polished.
-
-* Application resembles the mock-up functionality provided in the Challenge instructions.
-
-### Repository Quality: 13%
-
-* Repository has a unique name.
-
-* Repository follows best practices for file structure and naming conventions.
-
-* Repository follows best practices for class/id naming conventions, indentation, quality comments, etc.
-
-* Repository contains multiple descriptive commit messages.
-
-* Repository contains quality readme file with description, screenshot, and link to deployed application.
-
-## Review
-
-You are required to submit BOTH of the following for review:
-
-* The URL of the functional, deployed application.
-
-* The URL of the GitHub repository, with a unique name and a readme describing the project.
-
----
-© 2024 edX Boot Camps LLC. Confidential and Proprietary. All Rights Reserved.
+## License 
+This GitHub repository is licensed under the MIT license. Please refer to the license documentation [here](https://opensource.org/licenses/MIT).
+  
+## Questions
+This project was developed by [dymoy](https://github.com/dymoy).  
+For any related questions, please contact me via email at <derekymoy@gmail.com>.
